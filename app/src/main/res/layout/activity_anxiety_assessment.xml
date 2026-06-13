@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:text="@string/anxiety_title"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#1565C0"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="@string/anxiety_subtitle"
+            android:textSize="14sp"
+            android:textColor="#888888"
+            android:layout_marginBottom="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- Q1 -->
+        <TextView
+            android:text="@string/anxiety_q1"
+            android:textSize="15sp"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RadioGroup android:id="@+id/rg1"
+            android:layout_marginBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton android:text="@string/anxiety_opt1" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt2" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt3" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt4" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        </RadioGroup>
+
+        <!-- Q2 -->
+        <TextView
+            android:text="@string/anxiety_q2"
+            android:textSize="15sp"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RadioGroup android:id="@+id/rg2"
+            android:layout_marginBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton android:text="@string/anxiety_opt1" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt2" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt3" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt4" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        </RadioGroup>
+
+        <!-- Q3 -->
+        <TextView
+            android:text="@string/anxiety_q3"
+            android:textSize="15sp"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RadioGroup android:id="@+id/rg3"
+            android:layout_marginBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton android:text="@string/anxiety_opt1" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt2" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt3" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt4" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        </RadioGroup>
+
+        <!-- Q4 -->
+        <TextView
+            android:text="@string/anxiety_q4"
+            android:textSize="15sp"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RadioGroup android:id="@+id/rg4"
+            android:layout_marginBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton android:text="@string/anxiety_opt1" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt2" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt3" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt4" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        </RadioGroup>
+
+        <!-- Q5 -->
+        <TextView
+            android:text="@string/anxiety_q5"
+            android:textSize="15sp"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RadioGroup android:id="@+id/rg5"
+            android:layout_marginBottom="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RadioButton android:text="@string/anxiety_opt1" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt2" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt3" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:text="@string/anxiety_opt4" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:text="@string/submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#1565C0"/>
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:text="@string/welcome"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#1565C0"
+            android:layout_marginBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="@string/select_appointment"
+            android:textSize="14sp"
+            android:textColor="#888888"
+            android:layout_marginBottom="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- Procedure Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#E3F2FD"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvProcedure"
+                android:text="Loading procedure..."
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#1565C0"
+                android:layout_marginBottom="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvCategory"
+                android:text=""
+                android:textSize="13sp"
+                android:textColor="#555555"
+                android:layout_marginBottom="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:text=""
+                android:textSize="12sp"
+                android:textColor="#888888"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <!-- Progress Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#F0F4FF"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:text="Your Progress"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#1565C0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tvProgressCount"
+                    android:text="0 / 4 Completed"
+                    android:textSize="14sp"
+                    android:textColor="#1565C0"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:max="4"
+                android:progress="0"
+                android:progressTint="#1565C0"
+                android:progressBackgroundTint="#C5CAE9"/>
+
+        </LinearLayout>
+
+        <!-- Appointment 1 -->
+        <TextView
+            android:text="@string/apt1_label"
+            android:textSize="13sp"
+            android:textColor="#888888"
+            android:layout_marginBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnAppointment1"
+            android:text="@string/appointment1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="#1565C0"/>
+
+        <!-- Appointment 2 -->
+        <TextView
+            android:text="@string/apt2_label"
+            android:textSize="13sp"
+            android:textColor="#888888"
+            android:layout_marginBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnAppointment2"
+            android:text="@string/appointment2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="#1565C0"/>
+
+        <!-- Appointment 3 -->
+        <TextView
+            android:text="@string/apt3_label"
+            android:textSize="13sp"
+            android:textColor="#888888"
+            android:layout_marginBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnAppointment3"
+            android:text="@string/appointment3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="#1565C0"/>
+
+        <!-- Follow Up -->
+        <TextView
+            android:text="@string/followup_label"
+            android:textSize="13sp"
+            android:textColor="#888888"
+            android:layout_marginBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnFollowUp"
+            android:text="@string/followup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="#0288D1"/>
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:text="@string/logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#D32F2F"/>
+
+    </LinearLayout>
+</ScrollView>
