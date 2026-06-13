@@ -1092,5 +1092,43 @@ def generate_report(test_results=None):
     except Exception as e:
         print(f"Error saving report: {e}")
 
+    # Auto-export dashboard data for the web dashboard in repository root
+    try:
+        import json
+        dashboard_data = {
+            "summary": {
+                "total": total,
+                "passed": passed,
+                "failed": failed,
+                "pass_rate": round(pass_rate, 2),
+                "deployable": pass_rate >= 95.0,
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            },
+            "test_cases": []
+        }
+        for tc in test_cases:
+            res = test_results.get(tc["id"], {"status": "Not Run", "actual": "Simulated environment execution pending."})
+            dashboard_data["test_cases"].append({
+                "id": tc["id"],
+                "category": tc["cat"],
+                "platform": tc["platform"],
+                "feature": tc["feature"],
+                "description": tc["desc"],
+                "preconditions": tc["pre"],
+                "steps": tc["steps"],
+                "expected": tc["expected"],
+                "actual": res["actual"],
+                "status": res["status"],
+                "priority": tc["priority"]
+            })
+        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        js_path = os.path.join(repo_root, "test_cases_data.js")
+        js_content = f"const TEST_CASES_DATA = {json.dumps(dashboard_data, indent=2)};"
+        with open(js_path, "w", encoding="utf-8") as f:
+            f.write(js_content)
+        print(f"Dashboard data file generated successfully: {js_path}")
+    except Exception as e:
+        print(f"Error generating dashboard data: {e}")
+
 if __name__ == "__main__":
     generate_report()
