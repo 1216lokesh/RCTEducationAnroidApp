@@ -1,7 +1,7 @@
 package com.rct.app.api;
 
 public class ApiConfig {
-    public static final String BASE_URL = "http://10.60.127.221/rct_api/";
+    public static final String BASE_URL = "http://10.182.74.221/rct_api/";
 
 
     // Auth
