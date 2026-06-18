@@ -1127,5 +1127,83 @@ def generate_report(test_results=None):
     except Exception as e:
         print(f"Error generating dashboard data: {e}")
 
+    # Generate Markdown summary for GitHub Actions
+    try:
+        summary_path = os.path.join(os.path.dirname(__file__), "github_summary.md")
+        
+        # Group by category
+        categories = {}
+        for tc in test_cases:
+            cat = tc["cat"]
+            res = test_results.get(tc["id"], {"status": "Not Run"})
+            if cat not in categories:
+                categories[cat] = {"total": 0, "passed": 0}
+            categories[cat]["total"] += 1
+            if res["status"] == "Pass":
+                categories[cat]["passed"] += 1
+        
+        # Identify failures
+        failed_cases = []
+        for tc in test_cases:
+            res = test_results.get(tc["id"], {"status": "Not Run"})
+            if res["status"] == "Fail":
+                failed_cases.append({
+                    "id": tc["id"],
+                    "category": tc["cat"],
+                    "feature": tc["feature"],
+                    "desc": tc["desc"],
+                    "actual": res.get("actual", "N/A")
+                })
+        
+        md_lines = []
+        md_lines.append("# :rocket: RCT Education Portal - E2E QA Test Summary\n")
+        md_lines.append(f"**Generated:** `{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}`\n")
+        
+        status_emoji = "✅" if pass_rate >= 95.0 else "❌"
+        status_text = "DEPLOYABLE" if pass_rate >= 95.0 else "NON-DEPLOYABLE"
+        md_lines.append(f"### Deployment Readiness Status: {status_emoji} **{status_text}** ({pass_rate:.2f}% Pass Rate)\n")
+        
+        # Stats table
+        md_lines.append("| Metric | Value |")
+        md_lines.append("| --- | --- |")
+        md_lines.append(f"| **Total Tests** | `{total}` |")
+        md_lines.append(f"| **Passed** | `{passed}` |")
+        md_lines.append(f"| **Failed** | `{failed}` |")
+        md_lines.append(f"| **Pass Rate** | `{pass_rate:.2f}%` |")
+        md_lines.append("\n")
+        
+        # Category breakdown table
+        md_lines.append("### :bar_chart: Category Breakdown\n")
+        md_lines.append("| Category | Total | Passed | Failed | Pass Rate | Status |")
+        md_lines.append("| --- | --- | --- | --- | --- | --- |")
+        for cat, stats in categories.items():
+            cat_pass_rate = (stats["passed"] / stats["total"]) * 100 if stats["total"] > 0 else 0
+            cat_failed = stats["total"] - stats["passed"]
+            cat_status = "🟢 Perfect" if cat_pass_rate == 100 else ("🟡 Warning" if cat_pass_rate >= 90 else "🔴 Critical")
+            md_lines.append(f"| {cat} | {stats['total']} | {stats['passed']} | {cat_failed} | `{cat_pass_rate:.1f}%` | {cat_status} |")
+        md_lines.append("\n")
+        
+        # Failures block
+        if failed_cases:
+            md_lines.append("### :warning: Failed Test Cases\n")
+            md_lines.append("| Test Case ID | Category | Feature | Description | Actual Result |")
+            md_lines.append("| --- | --- | --- | --- | --- |")
+            for fc in failed_cases:
+                md_lines.append(f"| **{fc['id']}** | {fc['category']} | {fc['feature']} | {fc['desc']} | `{fc['actual']}` |")
+            md_lines.append("\n")
+        else:
+            md_lines.append("### :white_check_mark: All test assertions passed successfully!\n")
+            
+        md_lines.append("### :floppy_disk: Artifacts\n")
+        md_lines.append("The complete reports are uploaded and available in this workflow run's artifacts:\n")
+        md_lines.append("- `test_cases.xlsx`: Comprehensive Excel sheet formatted with color themes and detailed steps.\n")
+        md_lines.append("- `test-report-dashboard`: Contains the interactive HTML dashboard (`index.html`) to visualize the results locally.\n")
+        
+        with open(summary_path, "w", encoding="utf-8") as f:
+            f.write("\n".join(md_lines))
+        print(f"GitHub markdown summary generated successfully: {summary_path}")
+    except Exception as e:
+        print(f"Error generating GitHub markdown summary: {e}")
+
 if __name__ == "__main__":
     generate_report()
