@@ -52,7 +52,7 @@ def run_user_session(user_id, session, start_time):
     # Alternate targets to simulate mixed user behaviors
     targets = [
         {"name": "Static Frontend (index.html)", "path": "/index.html", "method": "GET"},
-        {"name": "Auth Login API (login.php)", "path": "/backend/api/auth/login.php", "method": "POST", "payload": {"email": "load_test@rct.com", "password": "wrong_password"}}
+        {"name": "Auth Login API (login.php)", "path": "/rct_api/auth/login.php", "method": "POST", "payload": {"email": "load_test@rct.com", "password": "wrong_password"}}
     ]
     
     idx = user_id % len(targets)

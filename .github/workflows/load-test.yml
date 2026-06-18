@@ -61,7 +61,7 @@ jobs:
           cd appium_tests
           python run_load_tests.py
         env:
-          BASE_URL: "http://127.0.0.1:8000/rct-education-web"
+          BASE_URL: "http://127.0.0.1:8000"
           DB_HOST: "127.0.0.1"
 
       - name: Upload Load Test Excel Report
