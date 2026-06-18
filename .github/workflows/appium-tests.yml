@@ -12,11 +12,17 @@ on:
 jobs:
   run-qa-suite:
     name: Execute QA Test Suite
-    runs-on: ubuntu-latest
+    runs-on: macos-13
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -29,9 +35,100 @@ jobs:
           python -m pip install --upgrade pip
           pip install openpyxl pytest Appium-Python-Client selenium
 
-      - name: Execute QA Test Orchestrator
+      - name: Setup Node.js & Appium
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Appium
         run: |
-          python appium_tests/run_tests.py
+          npm install -g appium
+          appium driver install uiautomator2
+
+      - name: Build Android Debug APK
+        run: |
+          # Rewrite BASE_URL in ApiConfig.java dynamically before compiling the APK to route network traffic to local mock server
+          python -c "
+          import re
+          with open('app/src/main/java/com/rct/app/api/ApiConfig.java', 'r') as f:
+              content = f.read()
+          content = re.sub(r'public\s+static\s+final\s+String\s+BASE_URL\s*=\s*\"[^\"]+\";', 'public static final String BASE_URL = \"http://10.0.2.2:5000/rct_api/\";', content)
+          with open('app/src/main/java/com/rct/app/api/ApiConfig.java', 'w') as f:
+              f.write(content)
+          print('Successfully rewrote BASE_URL in ApiConfig.java')
+          "
+          
+          # Build APK
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Run Python Mock Server
+        run: |
+          # Run the mock server in the background on port 5000
+          python -c "
+          import http.server
+          import json
+          class MockHandler(http.server.BaseHTTPRequestHandler):
+              def do_POST(self):
+                  content_length = int(self.headers['Content-Length'])
+                  post_data = self.rfile.read(content_length)
+                  try: data = json.loads(post_data.decode('utf-8'))
+                  except: data = {}
+                  path = self.path
+                  response_data = {'status': 'error', 'message': 'Endpoint not mocked'}
+                  if 'register.php' in path:
+                      response_data = {'status': 'success'}
+                  elif 'login.php' in path:
+                      email = data.get('email', '')
+                      password = data.get('password', '')
+                      if password == 'wrongpassword':
+                          response_data = {'status': 'fail', 'message': 'Invalid credentials'}
+                      elif 'admin' in email:
+                          response_data = {'status': 'success', 'id': 1, 'name': 'Admin User', 'role': 'admin'}
+                      else:
+                          response_data = {'status': 'success', 'id': 2, 'name': 'Patient User', 'role': 'patient'}
+                  self.send_response(200)
+                  self.send_header('Content-Type', 'application/json')
+                  self.end_headers()
+                  self.wfile.write(json.dumps(response_data).encode('utf-8'))
+              def do_GET(self):
+                  self.send_response(200)
+                  self.send_header('Content-Type', 'application/json')
+                  self.end_headers()
+                  self.wfile.write(json.dumps({'status': 'success'}).encode('utf-8'))
+          server = http.server.HTTPServer(('0.0.0.0', 5000), MockHandler)
+          print('Mock server started on port 5000')
+          server.serve_forever()
+          " &
+
+      - name: Run Appium Tests on Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: google_apis
+          arch: x86_64
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: |
+            # 1. Start Appium server in background
+            appium --port 4723 &
+            
+            # 2. Wait for Appium to start
+            for i in {1..15}; do
+              if python -c "import socket; s = socket.socket(); s.connect(('localhost', 4723))" 2>/dev/null; then
+                echo "Appium server is active!"
+                break
+              fi
+              echo "Waiting for Appium server..."
+              sleep 2
+            done
+            
+            # 3. Install the pre-built APK
+            adb install app/build/outputs/apk/debug/app-debug.apk
+            
+            # 4. Run tests
+            python appium_tests/run_tests.py
 
       - name: Publish Test Summary to Job Summary
         if: always()
