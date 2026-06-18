@@ -129,7 +129,26 @@ def test_logout(driver):
     btn_logout = wait_for_element(driver, By.ID, "com.rct.app:id/btnLogout")
     assert btn_logout is not None, "Logout button not found on Dashboard."
     btn_logout.click()
+    time.sleep(1)
+    
+    # Click confirmation button in logout dialog ("Yes, Logout")
+    btn_confirm = wait_for_element(driver, By.ID, "android:id/button1", timeout=5)
+    if btn_confirm:
+        btn_confirm.click()
+    else:
+        try:
+            btn_confirm_text = driver.find_element(By.XPATH, "//*[@text='Yes, Logout' or @text='YES, LOGOUT']")
+            btn_confirm_text.click()
+        except Exception as e:
+            print(f"Could not find confirmation button: {e}")
+            
     time.sleep(2)
+    
+    # After logout, we are redirected to LanguageActivity. We must select English to go to Login screen.
+    btn_english = wait_for_element(driver, By.ID, "com.rct.app:id/btnEnglish", timeout=5)
+    if btn_english:
+        btn_english.click()
+        time.sleep(2)
     
     # Verify redirected back to Login screen
     et_email = wait_for_element(driver, By.ID, "com.rct.app:id/etEmail")

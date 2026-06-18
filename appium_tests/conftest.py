@@ -13,6 +13,7 @@ def driver():
     options.set_capability("appPackage", "com.rct.app")
     options.set_capability("appActivity", "com.rct.app.activity.SplashActivity")
     options.set_capability("noReset", False)  # Start clean by default to test register/login
+    options.set_capability("autoGrantPermissions", True)
     options.set_capability("newCommandTimeout", 120)
     
     appium_server_url = "http://localhost:4723"
