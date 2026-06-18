@@ -97,10 +97,25 @@ def test_patient_registration_flow(driver):
     btn_submit.click()
     time.sleep(3)
     
+    # The app actually redirects to LoginActivity after successful registration, so we must login to get to the Dashboard
+    et_login_email = wait_for_element(driver, By.ID, "com.rct.app:id/etEmail", timeout=6)
+    assert et_login_email is not None, "Failed to redirect back to Login screen after registration."
+    
+    et_login_email.clear()
+    et_login_email.send_keys(email_addr)
+    
+    et_login_pass = driver.find_element(By.ID, "com.rct.app:id/etPassword")
+    et_login_pass.clear()
+    et_login_pass.send_keys("mobilepass123")
+    
+    btn_login = driver.find_element(By.ID, "com.rct.app:id/btnLogin")
+    btn_login.click()
+    time.sleep(3)
+    
     # Check if we were redirected to Dashboard (DashboardActivity has tvWelcome)
     tv_welcome = wait_for_element(driver, By.ID, "com.rct.app:id/tvWelcome", timeout=6)
     assert tv_welcome is not None, "Failed to register patient or redirect to Dashboard."
-    print(f"Registered patient user {email_addr} successfully.")
+    print(f"Registered and logged in patient user {email_addr} successfully.")
 
 def test_logout(driver):
     """TC-FUNC-22: Verify patient logout flow and session clear"""
