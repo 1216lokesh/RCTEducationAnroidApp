@@ -3,7 +3,7 @@ import time
 from appium import webdriver
 from appium.options.common import AppiumOptions
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def driver():
     # Setup Appium connection options
     options = AppiumOptions()
@@ -20,6 +20,25 @@ def driver():
     print(f"\nConnecting to Appium Server at {appium_server_url}...")
     try:
         driver = webdriver.Remote(appium_server_url, options=options)
+        
+        # Automatically select English language if LanguageActivity is presented
+        try:
+            from selenium.webdriver.support.ui import WebDriverWait
+            from selenium.webdriver.support import expected_conditions as EC
+            from selenium.webdriver.common.by import By
+            btn_english = WebDriverWait(driver, 8).until(
+                EC.presence_of_element_located((By.ID, "com.rct.app:id/btnEnglish"))
+            )
+            print("Language selection screen detected. Selecting English...")
+            btn_english.click()
+            # Wait for Login screen to load
+            WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((By.ID, "com.rct.app:id/etEmail"))
+            )
+            print("Successfully transitioned to Login screen.")
+        except Exception as lang_err:
+            print(f"No language selection screen found or error selecting language: {lang_err}")
+            
         yield driver
         print("Tearing down Appium Driver session...")
         driver.quit()
