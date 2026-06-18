@@ -118,15 +118,18 @@ jobs:
           script: |
             # 1. Start Appium server in background
             nohup appium --port 4723 > appium.log 2>&1 &
+            APPIUM_PID=$!
             
             # 2. Wait for Appium to start
-            for i in {1..15}; do
+            i=0
+            while [ $i -lt 15 ]; do
               if python -c "import socket; s = socket.socket(); s.connect(('localhost', 4723))" 2>/dev/null; then
                 echo "Appium server is active!"
                 break
               fi
               echo "Waiting for Appium server..."
               sleep 2
+              i=$((i + 1))
             done
             
             # 3. Install the pre-built APK
@@ -136,7 +139,7 @@ jobs:
             python appium_tests/run_tests.py
             
             # 5. Stop Appium server
-            kill $(jobs -p) || true
+            kill $APPIUM_PID || true
 
       - name: Stop Python Mock Server
         if: always()
