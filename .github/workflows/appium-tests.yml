@@ -64,7 +64,7 @@ jobs:
       - name: Run Python Mock Server
         run: |
           # Run the mock server in the background on port 5000
-          python -c "
+          nohup python -c "
           import http.server
           import json
           class MockHandler(http.server.BaseHTTPRequestHandler):
@@ -98,7 +98,7 @@ jobs:
           server = http.server.HTTPServer(('0.0.0.0', 5000), MockHandler)
           print('Mock server started on port 5000')
           server.serve_forever()
-          " &
+          " > mock_server.log 2>&1 &
 
       - name: Enable KVM group perms
         run: |
@@ -112,12 +112,12 @@ jobs:
           api-level: 30
           target: google_apis
           arch: x86_64
-          force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          force-avd-creation: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot
           disable-animations: true
           script: |
             # 1. Start Appium server in background
-            appium --port 4723 &
+            nohup appium --port 4723 > appium.log 2>&1 &
             
             # 2. Wait for Appium to start
             for i in {1..15}; do
@@ -134,6 +134,14 @@ jobs:
             
             # 4. Run tests
             python appium_tests/run_tests.py
+            
+            # 5. Stop Appium server
+            kill $(jobs -p) || true
+
+      - name: Stop Python Mock Server
+        if: always()
+        run: |
+          pkill -f "http.server" || true
 
       - name: Publish Test Summary to Job Summary
         if: always()
