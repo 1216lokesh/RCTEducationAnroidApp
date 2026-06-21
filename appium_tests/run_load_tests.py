@@ -36,8 +36,8 @@ except ImportError:
 
 # Configurations
 BASE_URL = os.environ.get("BASE_URL", "http://localhost/rct-education-web")
-NUM_USERS = 100
-DURATION = 60  # seconds
+NUM_USERS = int(os.environ.get("NUM_USERS", 100))
+DURATION = int(os.environ.get("DURATION", 60))  # seconds
 
 # Shared thread-safe metrics storage
 metrics_lock = threading.Lock()

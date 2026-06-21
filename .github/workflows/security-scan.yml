@@ -23,11 +23,21 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
+      - name: Checkout Android Repository (Tests)
+        uses: actions/checkout@v4
+        with:
+          path: android-app
+
       - name: Checkout Web Repository (Backend)
         uses: actions/checkout@v4
         with:
           repository: 1216lokesh/RCTEducationApp
           path: rct-education-web
+
+      - name: Override Backend Tests with 500 Test Cases Version
+        run: |
+          cp android-app/backend_tests_override/generate_excel.py rct-education-web/backend/automated_tests/generate_excel.py
+          cp android-app/backend_tests_override/run_tests.py rct-education-web/backend/automated_tests/run_tests.py
 
       - name: Import Database Schema
         run: |
